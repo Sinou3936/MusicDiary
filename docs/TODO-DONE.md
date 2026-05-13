@@ -9,3 +9,7 @@
 - [x] 에러 처리 & 테스트 전략 설계
 - [x] 설계 문서 작성 (docs/superpowers/specs/2026-05-13-music-diary-design.md)
 - [x] CLAUDE.md 기반 docs/ 문서 초기화
+- [x] Task 1: Next.js 프로젝트 초기화 (FrontEnd/)
+- [x] Task 2: Supabase CLI 로컬 환경 구성 (BackEnd/)
+- [x] Task 3: DB 마이그레이션 — profiles & auth trigger
+- [x] Task 4: DB 마이그레이션 — emotion_tags & seed
