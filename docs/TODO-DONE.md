@@ -15,3 +15,4 @@
 - [x] Task 4: DB 마이그레이션 — emotion_tags & seed
 - [x] Task 5: DB 마이그레이션 — diary_entries, diary_emotion_tags, recommendations + RLS
 - [x] Task 6: TypeScript 타입 생성 & Supabase 클라이언트 설정
+- [x] Task 7: 인증 미들웨어 & Auth 콜백
