@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 2 진행 중 — Task 1부터 시작
+Plan 2 진행 중 — Task 1 완료, Task 2부터 재개 예정
 
 ## 다음 작업
-Task 1: 탐색 피드 페이지 (`/explore`)
+Task 2: ExploreCard 컴포넌트 (TDD)
 
 ## 구현 계획
 docs/superpowers/plans/2026-05-16-music-diary-plan2.md
