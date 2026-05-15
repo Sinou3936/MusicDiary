@@ -18,3 +18,4 @@
 - [x] Task 7: 인증 미들웨어 & Auth 콜백
 - [x] Task 8: 랜딩/로그인 페이지
 - [x] Task 9: Protected Layout & 다이어리 타임라인 뼈대
+- [x] Task 10: EmotionTagSelector 컴포넌트 (TDD, 4 tests)
