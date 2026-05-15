@@ -1,12 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
 import DiaryCard from '@/components/DiaryCard'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default async function DiaryPage() {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  if (!user) redirect('/')
 
   const { data: entries } = await supabase
     .from('diary_entries')
@@ -16,7 +19,7 @@ export default async function DiaryPage() {
         emotion_tags ( id, name )
       )
     `)
-    .eq('user_id', user!.id)
+    .eq('user_id', user.id)
     .order('listened_at', { ascending: false })
 
   if (!entries || entries.length === 0) {
