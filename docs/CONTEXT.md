@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 진행 중 — Task 11까지 완료, Task 12부터 재개 예정
+Plan 1 진행 중 — Task 12까지 완료, Task 13부터 재개 예정
 
 ## 다음 작업
-Task 12: DiaryCard 컴포넌트 (TDD)
+Task 13: 새 다이어리 기록 작성 페이지
 
 ## 프로젝트
 - 서비스명: 음악 다이어리

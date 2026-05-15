@@ -1,37 +1,60 @@
 import Link from 'next/link'
-import type { Tables } from '@/types/database.types'
+import Image from 'next/image'
 
-type DiaryEntryWithTags = Tables<'diary_entries'> & {
+interface DiaryEntryWithTags {
+  id: string
+  youtube_id: string
+  title: string
+  thumbnail: string
+  memo: string | null
+  is_public: boolean
+  listened_at: string
   diary_emotion_tags: {
-    emotion_tags: Pick<Tables<'emotion_tags'>, 'id' | 'name'> | null
+    emotion_tags: { id: string; name: string } | null
   }[]
 }
 
 export default function DiaryCard({ entry }: { entry: DiaryEntryWithTags }) {
   const tags = entry.diary_emotion_tags
-    .map((t) => t.emotion_tags)
-    .filter(Boolean) as Pick<Tables<'emotion_tags'>, 'id' | 'name'>[]
+    .map((det) => det.emotion_tags)
+    .filter(Boolean) as { id: string; name: string }[]
+
+  const date = new Date(entry.listened_at).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 
   return (
     <Link href={`/diary/${entry.id}`}>
-      <div className="flex gap-4 p-4 bg-gray-900 rounded-xl hover:bg-gray-800 transition">
-        <img
+      <article className="flex gap-4 p-4 rounded-xl bg-gray-900 hover:bg-gray-800 transition">
+        <Image
           src={entry.thumbnail}
           alt={entry.title}
-          className="w-20 h-14 object-cover rounded-lg flex-shrink-0"
+          width={80}
+          height={60}
+          className="rounded-lg object-cover flex-shrink-0"
         />
-        <div className="flex flex-col gap-1 min-w-0">
-          <p className="font-medium truncate">{entry.title}</p>
-          <div className="flex gap-1 flex-wrap">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-semibold truncate">{entry.title}</h3>
+            <span className="text-xs text-gray-500 flex-shrink-0">
+              {entry.is_public ? '공개' : '비공개'}
+            </span>
+          </div>
+          <div className="flex gap-1 mt-1 flex-wrap">
             {tags.map((tag) => (
               <span key={tag.id} className="text-xs bg-gray-700 px-2 py-0.5 rounded-full">
                 {tag.name}
               </span>
             ))}
           </div>
-          {entry.memo && <p className="text-sm text-gray-400 truncate">{entry.memo}</p>}
+          {entry.memo && (
+            <p className="text-sm text-gray-400 mt-1 line-clamp-2">{entry.memo}</p>
+          )}
+          <p className="text-xs text-gray-600 mt-1">{date}</p>
         </div>
-      </div>
+      </article>
     </Link>
   )
 }
