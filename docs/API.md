@@ -16,106 +16,174 @@
 |---------|------|------|
 | `q` | ✅ | 검색어 |
 
-**응답**
+**Response 200**
 
 ```json
 [
   {
-    "id": "youtube_video_id",
+    "id": "dQw4w9WgXcQ",
     "title": "곡 제목",
-    "thumbnail": "https://i.ytimg.com/...",
+    "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg",
     "channelTitle": "채널명"
   }
 ]
 ```
 
-| 상태코드 | 조건 |
-|---------|------|
-| 200 | 성공 |
-| 400 | `q` 파라미터 없음 |
-| 429 | YouTube API 할당량 초과 |
-| 500 | 서버 에러 |
+**Response 400**
+
+```json
+{ "error": "검색어를 입력해주세요" }
+```
+
+**Response 429**
+
+```json
+{ "error": "잠시 후 다시 시도해주세요" }
+```
+
+**Response 500**
+
+```json
+{ "error": "검색 중 오류가 발생했습니다" }
+```
 
 ---
 
 ## 다이어리 CRUD
 
-Supabase 클라이언트로 직접 처리. RLS가 적용되어 있어 인증된 사용자만 접근 가능.
+Supabase 클라이언트로 직접 처리. RLS 적용 — 인증된 사용자만 접근 가능.
+
+---
 
 ### CREATE — 다이어리 기록 저장
 
-```ts
-// Server Action (diary/new 페이지)
-const { data, error } = await supabase
-  .from('diary_entries')
-  .insert({
-    user_id: user.id,
-    youtube_id: string,
-    title: string,
-    thumbnail: string,
-    memo: string | null,
-    is_public: boolean,
-    listened_at: string, // ISO 8601
-  })
-  .select()
-  .single()
+**Request Body**
 
-// 감정 태그 연결 (다대다)
-await supabase.from('diary_emotion_tags').insert(
-  tagIds.map((tag_id) => ({ diary_id: data.id, tag_id }))
-)
+```json
+{
+  "user_id": "uuid",
+  "youtube_id": "dQw4w9WgXcQ",
+  "title": "곡 제목",
+  "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg",
+  "memo": "오늘 기분에 딱 맞는 노래",
+  "is_public": false,
+  "listened_at": "2026-05-16T14:00:00+09:00"
+}
 ```
+
+**감정 태그 연결 (diary_emotion_tags)**
+
+```json
+[
+  { "diary_id": "uuid", "tag_id": "uuid" },
+  { "diary_id": "uuid", "tag_id": "uuid" }
+]
+```
+
+**Response 201**
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "youtube_id": "dQw4w9WgXcQ",
+  "title": "곡 제목",
+  "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg",
+  "memo": "오늘 기분에 딱 맞는 노래",
+  "is_public": false,
+  "listened_at": "2026-05-16T14:00:00+09:00",
+  "created_at": "2026-05-16T14:01:00+09:00"
+}
+```
+
+---
 
 ### READ — 내 타임라인 목록
 
-```ts
-// Server Component (diary/page.tsx)
-const { data } = await supabase
-  .from('diary_entries')
-  .select(`
-    *,
-    diary_emotion_tags (
-      emotion_tags ( id, name )
-    )
-  `)
-  .eq('user_id', user.id)
-  .order('listened_at', { ascending: false })
+**Response 200**
+
+```json
+[
+  {
+    "id": "uuid",
+    "user_id": "uuid",
+    "youtube_id": "dQw4w9WgXcQ",
+    "title": "곡 제목",
+    "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg",
+    "memo": "오늘 기분에 딱 맞는 노래",
+    "is_public": false,
+    "listened_at": "2026-05-16T14:00:00+09:00",
+    "created_at": "2026-05-16T14:01:00+09:00",
+    "diary_emotion_tags": [
+      {
+        "emotion_tags": { "id": "uuid", "name": "행복" }
+      },
+      {
+        "emotion_tags": { "id": "uuid", "name": "설렘" }
+      }
+    ]
+  }
+]
 ```
+
+---
 
 ### READ — 단건 상세
 
-```ts
-// Server Component (diary/[id]/page.tsx)
-const { data } = await supabase
-  .from('diary_entries')
-  .select(`
-    *,
-    diary_emotion_tags (
-      emotion_tags ( id, name )
-    )
-  `)
-  .eq('id', id)
-  .single()
+**Response 200**
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "youtube_id": "dQw4w9WgXcQ",
+  "title": "곡 제목",
+  "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg",
+  "memo": "오늘 기분에 딱 맞는 노래",
+  "is_public": false,
+  "listened_at": "2026-05-16T14:00:00+09:00",
+  "created_at": "2026-05-16T14:01:00+09:00",
+  "diary_emotion_tags": [
+    {
+      "emotion_tags": { "id": "uuid", "name": "행복" }
+    }
+  ]
+}
 ```
+
+---
 
 ### UPDATE — 기록 수정 (Plan 2)
 
-```ts
-const { error } = await supabase
-  .from('diary_entries')
-  .update({ memo, is_public, listened_at })
-  .eq('id', id)
-  .eq('user_id', user.id)
+**Request Body**
+
+```json
+{
+  "memo": "수정된 메모",
+  "is_public": true,
+  "listened_at": "2026-05-16T15:00:00+09:00"
+}
 ```
+
+**Response 200**
+
+```json
+{
+  "id": "uuid",
+  "memo": "수정된 메모",
+  "is_public": true,
+  "listened_at": "2026-05-16T15:00:00+09:00"
+}
+```
+
+---
 
 ### DELETE — 기록 삭제 (Plan 2)
 
-```ts
-const { error } = await supabase
-  .from('diary_entries')
-  .delete()
-  .eq('id', id)
-  .eq('user_id', user.id)
+**Response 204**
+
+```json
+{}
 ```
 
 ---
@@ -124,12 +192,19 @@ const { error } = await supabase
 
 ### READ — 시스템 태그 전체 조회
 
-```ts
-const { data } = await supabase
-  .from('emotion_tags')
-  .select('*')
-  .eq('is_system', true)
-  .order('name')
+**Response 200**
+
+```json
+[
+  { "id": "uuid", "name": "행복", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "설렘", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "평온", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "우울", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "그리움", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "신남", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "외로움", "is_system": true, "user_id": null, "created_at": "..." },
+  { "id": "uuid", "name": "위로", "is_system": true, "user_id": null, "created_at": "..." }
+]
 ```
 
 ---
@@ -138,19 +213,35 @@ const { data } = await supabase
 
 ### READ — 공개 기록 목록
 
-```ts
-const { data } = await supabase
-  .from('diary_entries')
-  .select(`
-    *,
-    profiles ( username, avatar_url ),
-    diary_emotion_tags (
-      emotion_tags ( id, name )
-    )
-  `)
-  .eq('is_public', true)
-  .order('listened_at', { ascending: false })
-  .range(offset, offset + 19) // 무한 스크롤, 20개씩
+**Query Parameters**
+
+| 파라미터 | 필수 | 설명 |
+|---------|------|------|
+| `offset` | ❌ | 페이징 오프셋 (기본값 0) |
+
+**Response 200**
+
+```json
+[
+  {
+    "id": "uuid",
+    "youtube_id": "dQw4w9WgXcQ",
+    "title": "곡 제목",
+    "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg",
+    "memo": "공개된 메모",
+    "is_public": true,
+    "listened_at": "2026-05-16T14:00:00+09:00",
+    "profiles": {
+      "username": "닉네임",
+      "avatar_url": "https://..."
+    },
+    "diary_emotion_tags": [
+      {
+        "emotion_tags": { "id": "uuid", "name": "행복" }
+      }
+    ]
+  }
+]
 ```
 
 ---
