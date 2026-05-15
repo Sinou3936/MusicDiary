@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 진행 중 — Task 7까지 완료, Task 8부터 재개 예정
+Plan 1 진행 중 — Task 8까지 완료, Task 9부터 재개 예정
 
 ## 다음 작업
-Task 8: 랜딩/로그인 페이지
+Task 9: Protected Layout & 다이어리 타임라인 뼈대
 
 ## 프로젝트
 - 서비스명: 음악 다이어리
