@@ -19,6 +19,9 @@ export default function NewDiaryPage() {
   const [memo, setMemo] = useState('')
   const [isPublic, setIsPublic] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [recommendations, setRecommendations] = useState<YouTubeVideo[]>([])
+  const [recLoading, setRecLoading] = useState(false)
+  const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
     const supabase = createClient()
@@ -30,6 +33,26 @@ export default function NewDiaryPage() {
         if (data) setTags(data)
       })
   }, [])
+
+  useEffect(() => {
+    if (selectedTagIds.length === 0) {
+      setRecommendations([])
+      setShowSearch(false)
+      return
+    }
+    const selectedTagNames = tags
+      .filter((t) => selectedTagIds.includes(t.id))
+      .map((t) => t.name)
+    if (selectedTagNames.length === 0) return
+
+    const query = selectedTagNames.join(' ') + ' 음악'
+    setRecLoading(true)
+    fetch(`/api/youtube/search?q=${encodeURIComponent(query)}`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: YouTubeVideo[]) => setRecommendations(data))
+      .catch(() => setRecommendations([]))
+      .finally(() => setRecLoading(false))
+  }, [selectedTagIds, tags])
 
   async function handleSave() {
     if (!selectedVideo || selectedTagIds.length === 0) return
@@ -62,9 +85,17 @@ export default function NewDiaryPage() {
       return
     }
 
-    await supabase
-      .from('diary_emotion_tags')
-      .insert(selectedTagIds.map((tagId) => ({ diary_id: entry.id, tag_id: tagId })))
+    await Promise.all([
+      supabase
+        .from('diary_emotion_tags')
+        .insert(selectedTagIds.map((tagId) => ({ diary_id: entry.id, tag_id: tagId }))),
+      supabase.from('recommendations').insert({
+        user_id: user.id,
+        tag_ids: selectedTagIds,
+        youtube_id: selectedVideo.id,
+        title: selectedVideo.title,
+      }),
+    ])
 
     router.push('/diary')
   }
@@ -83,7 +114,6 @@ export default function NewDiaryPage() {
       </section>
 
       <section>
-        <h3 className="text-sm text-gray-400 mb-2">어떤 음악을 들었나요?</h3>
         {selectedVideo ? (
           <div className="flex gap-3 p-3 bg-gray-800 rounded-lg">
             <Image
@@ -104,8 +134,59 @@ export default function NewDiaryPage() {
               </button>
             </div>
           </div>
+        ) : selectedTagIds.length > 0 ? (
+          <>
+            <h3 className="text-sm text-gray-400 mb-2">추천 음악</h3>
+            {recLoading ? (
+              <div className="flex flex-col gap-2">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-14 rounded-lg bg-gray-800 animate-pulse" />
+                ))}
+              </div>
+            ) : recommendations.length > 0 ? (
+              <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+                {recommendations.map((video) => (
+                  <button
+                    key={video.id}
+                    type="button"
+                    onClick={() => setSelectedVideo(video)}
+                    className="flex gap-3 p-2 rounded-lg hover:bg-gray-800 text-left transition"
+                  >
+                    <Image
+                      src={video.thumbnail}
+                      alt={video.title}
+                      width={60}
+                      height={45}
+                      className="rounded object-cover flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">{video.title}</p>
+                      <p className="text-xs text-gray-500">{video.channelTitle}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">추천 결과가 없습니다</p>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowSearch((v) => !v)}
+              className="mt-3 text-xs text-gray-500 hover:text-gray-300 transition"
+            >
+              {showSearch ? '검색창 닫기' : '원하는 곡이 없나요? 직접 검색'}
+            </button>
+            {showSearch && (
+              <div className="mt-2">
+                <YoutubeSearchPanel onSelect={setSelectedVideo} />
+              </div>
+            )}
+          </>
         ) : (
-          <YoutubeSearchPanel onSelect={setSelectedVideo} />
+          <>
+            <h3 className="text-sm text-gray-400 mb-2">어떤 음악을 들었나요?</h3>
+            <YoutubeSearchPanel onSelect={setSelectedVideo} />
+          </>
         )}
       </section>
 

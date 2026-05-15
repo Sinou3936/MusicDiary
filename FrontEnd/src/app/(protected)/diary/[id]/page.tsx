@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import YouTubeEmbed from '@/components/YouTubeEmbed'
+import DeleteButton from './DeleteButton'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -43,21 +45,30 @@ export default async function DiaryDetailPage({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Link href="/diary" className="text-gray-400 hover:text-white text-sm">
-        ← 돌아가기
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link href="/diary" className="text-gray-400 hover:text-white text-sm">
+          ← 돌아가기
+        </Link>
+        {isOwner && (
+          <div className="flex items-center gap-4">
+            <Link
+              href={`/diary/${entry.id}/edit`}
+              className="text-sm text-gray-400 hover:text-white"
+            >
+              수정
+            </Link>
+            <DeleteButton id={entry.id} />
+          </div>
+        )}
+      </div>
 
       <h2 className="text-xl font-bold">{entry.title}</h2>
 
-      <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-        <iframe
-          src={`https://www.youtube.com/embed/${entry.youtube_id}`}
-          title={entry.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full rounded-xl"
-        />
-      </div>
+      <YouTubeEmbed
+        youtubeId={entry.youtube_id}
+        title={entry.title}
+        thumbnail={entry.thumbnail}
+      />
 
       <div className="flex gap-2 flex-wrap">
         {tags.map((tag) => (
