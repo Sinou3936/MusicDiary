@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 
 interface Props {
@@ -48,25 +47,16 @@ export default async function DiaryDetailPage({ params }: Props) {
         ← 돌아가기
       </Link>
 
-      <div className="flex gap-4">
-        <Image
-          src={entry.thumbnail}
-          alt={entry.title}
-          width={120}
-          height={90}
-          className="rounded-xl object-cover"
+      <h2 className="text-xl font-bold">{entry.title}</h2>
+
+      <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+        <iframe
+          src={`https://www.youtube.com/embed/${entry.youtube_id}`}
+          title={entry.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full rounded-xl"
         />
-        <div>
-          <h2 className="text-xl font-bold">{entry.title}</h2>
-          <a
-            href={`https://www.youtube.com/watch?v=${entry.youtube_id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-indigo-400 hover:text-indigo-300 mt-1 inline-block"
-          >
-            YouTube에서 듣기 →
-          </a>
-        </div>
       </div>
 
       <div className="flex gap-2 flex-wrap">
