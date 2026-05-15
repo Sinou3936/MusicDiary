@@ -19,3 +19,4 @@
 - [x] Task 8: 랜딩/로그인 페이지
 - [x] Task 9: Protected Layout & 다이어리 타임라인 뼈대
 - [x] Task 10: EmotionTagSelector 컴포넌트 (TDD, 4 tests)
+- [x] Task 11: YouTube 검색 API Route (TDD, 3 tests)

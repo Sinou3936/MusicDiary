@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 진행 중 — Task 10까지 완료, Task 11부터 재개 예정
+Plan 1 진행 중 — Task 11까지 완료, Task 12부터 재개 예정
 
 ## 다음 작업
-Task 11: YouTube 검색 API Route (TDD)
+Task 12: DiaryCard 컴포넌트 (TDD)
 
 ## 프로젝트
 - 서비스명: 음악 다이어리
