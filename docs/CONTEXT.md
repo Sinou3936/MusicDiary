@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 진행 중 — Task 5까지 완료, Task 6부터 재개 예정
+Plan 1 진행 중 — Task 6까지 완료, Task 7부터 재개 예정
 
 ## 다음 작업
-Task 6: TypeScript 타입 생성 & Supabase 클라이언트 설정
+Task 7: 인증 미들웨어 & Auth 콜백
 
 ## 프로젝트
 - 서비스명: 음악 다이어리
