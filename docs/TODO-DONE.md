@@ -22,3 +22,4 @@
 - [x] Task 11: YouTube 검색 API Route (TDD, 3 tests)
 - [x] Task 12: DiaryCard 컴포넌트 (TDD, 4 tests)
 - [x] Task 13: 새 다이어리 기록 작성 페이지
+- [x] Task 14: 다이어리 상세 페이지
