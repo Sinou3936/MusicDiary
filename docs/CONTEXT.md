@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 진행 중 — Task 14까지 완료, Task 15부터 재개 예정
+Plan 1 완료 — MVP 구현 완료
 
 ## 다음 작업
-Task 15: 에러/로딩 처리 & 전체 테스트 확인
+Plan 2: 탐색 피드, 감정 기반 추천, Update/Delete CRUD
 
 ## 프로젝트
 - 서비스명: 음악 다이어리

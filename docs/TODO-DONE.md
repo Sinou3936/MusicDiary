@@ -23,3 +23,4 @@
 - [x] Task 12: DiaryCard 컴포넌트 (TDD, 4 tests)
 - [x] Task 13: 새 다이어리 기록 작성 페이지
 - [x] Task 14: 다이어리 상세 페이지
+- [x] Task 15: 에러/로딩 처리 & 전체 테스트 확인 (11/11 pass)
