@@ -1,10 +1,10 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 진행 중 — Task 4까지 완료, Task 5부터 재개 예정
+Plan 1 진행 중 — Task 5까지 완료, Task 6부터 재개 예정
 
 ## 다음 작업
-Task 5: DB 마이그레이션 — diary_entries, diary_emotion_tags, recommendations + RLS
+Task 6: TypeScript 타입 생성 & Supabase 클라이언트 설정
 
 ## 프로젝트
 - 서비스명: 음악 다이어리
@@ -19,4 +19,5 @@ Task 5: DB 마이그레이션 — diary_entries, diary_emotion_tags, recommendat
 ## 완료된 마이그레이션
 - 20260513080149_profiles.sql
 - 20260513081313_emotion_tags.sql
+- 20260516000001_diary.sql (diary_entries, diary_emotion_tags, recommendations + RLS)
 - seed.sql (감정태그 8개)

@@ -13,3 +13,4 @@
 - [x] Task 2: Supabase CLI 로컬 환경 구성 (BackEnd/)
 - [x] Task 3: DB 마이그레이션 — profiles & auth trigger
 - [x] Task 4: DB 마이그레이션 — emotion_tags & seed
+- [x] Task 5: DB 마이그레이션 — diary_entries, diary_emotion_tags, recommendations + RLS
