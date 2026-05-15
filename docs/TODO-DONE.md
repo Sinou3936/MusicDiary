@@ -17,3 +17,4 @@
 - [x] Task 6: TypeScript 타입 생성 & Supabase 클라이언트 설정
 - [x] Task 7: 인증 미들웨어 & Auth 콜백
 - [x] Task 8: 랜딩/로그인 페이지
+- [x] Task 9: Protected Layout & 다이어리 타임라인 뼈대
