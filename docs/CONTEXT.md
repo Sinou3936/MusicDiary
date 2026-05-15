@@ -1,10 +1,13 @@
 # CONTEXT
 
 ## 현재 작업
-Plan 1 완료 — MVP 구현 완료
+Plan 2 진행 중 — Task 1부터 시작
 
 ## 다음 작업
-Plan 2: 탐색 피드, 감정 기반 추천, Update/Delete CRUD
+Task 1: 탐색 피드 페이지 (`/explore`)
+
+## 구현 계획
+docs/superpowers/plans/2026-05-16-music-diary-plan2.md
 
 ## 프로젝트
 - 서비스명: 음악 다이어리
